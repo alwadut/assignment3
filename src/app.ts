@@ -1,5 +1,7 @@
+import { model } from 'mongoose';
+import { Schema } from 'mongoose';
 import express,{Application,Request,Response} from 'express';
-import { model, Schema } from 'mongoose';
+
 import { noteRoutes } from './app/controler/node.controler';
 
 
