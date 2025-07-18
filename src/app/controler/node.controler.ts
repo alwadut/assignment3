@@ -168,19 +168,17 @@ noteRoutes.post("/api/borrow", async (req: Request, res: Response) => {
 noteRoutes.get("/api/borrow", async (req: Request, res: Response) => {
   try {
     const data = await Borrow.aggregate([
-   
       {
         $lookup: {
-          from: "notes",
-          localField: "_id",
-          foreignField: "_id",
+          from: "notes",              // collection name
+          localField: "book",         // field in Borrow referencing Note._id
+          foreignField: "_id",        // Note._id
           as: "bookDetails"
-        },
-        
-      },   
-       { $unwind: "$bookDetails" },
-       {
-      $group: {
+        }
+      },
+      { $unwind: "$bookDetails" },
+      {
+        $group: {
           _id: {
             title: "$bookDetails.title",
             isbn: "$bookDetails.isbn"
@@ -188,13 +186,12 @@ noteRoutes.get("/api/borrow", async (req: Request, res: Response) => {
           totalQuantity: { $sum: "$quantity" }
         }
       },
-
       {
         $project: {
           _id: 0,
           book: {
-            title: "$bookDetails.title",
-            isbn: "$bookDetails.isbn"
+            title: "$_id.title",
+            isbn: "$_id.isbn"
           },
           totalQuantity: 1
         }
