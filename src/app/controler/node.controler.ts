@@ -26,7 +26,7 @@ noteRoutes.post("/api", async (req: Request, res: Response) => {
   });
 });
 
-noteRoutes.get("/api/books", async (req: Request, res: Response) => {
+noteRoutes.get("/books", async (req: Request, res: Response) => {
 //   const body = req.body;
 
 //   const note = await Note.find({genre:"SCIENCE"});
@@ -60,7 +60,7 @@ const sortOrder = sort === "desc" ? -1 : 1;
 });
 
 
-noteRoutes.get("/api/books/:bookId", async (req: Request, res: Response): Promise<void> => {
+noteRoutes.get("/books/:bookId", async (req: Request, res: Response): Promise<void> => {
   try {
     const bookId = req.params.bookId;
     const data = await Note.findById(bookId);
@@ -88,7 +88,7 @@ noteRoutes.get("/api/books/:bookId", async (req: Request, res: Response): Promis
 });
 
 
-noteRoutes.put("/api/books/:bookId", async (req: Request, res: Response): Promise<void> => {
+noteRoutes.put("/books/:bookId", async (req: Request, res: Response): Promise<void> => {
   try {
     const bookId = req.params.bookId;
     const updates = req.body;
@@ -120,7 +120,7 @@ noteRoutes.put("/api/books/:bookId", async (req: Request, res: Response): Promis
 });
 
 
-noteRoutes.delete("/api/books/:bookId", async (req: Request, res: Response): Promise<void> => {
+noteRoutes.delete("/books/:bookId", async (req: Request, res: Response): Promise<void> => {
 
     const bookId = req.params.bookId;
   
@@ -134,7 +134,7 @@ noteRoutes.delete("/api/books/:bookId", async (req: Request, res: Response): Pro
   }
 );
 
-noteRoutes.post("/api/borrow", async (req: Request, res: Response) => {
+noteRoutes.post("/borrow", async (req: Request, res: Response) => {
   try {
     const { book, quantity, dueDate } = req.body;
     const data = await Note.findById(book);
@@ -165,14 +165,14 @@ noteRoutes.post("/api/borrow", async (req: Request, res: Response) => {
   }
 });
 
-noteRoutes.get("/api/borrow", async (req: Request, res: Response) => {
+noteRoutes.get("/borrow", async (req: Request, res: Response) => {
   try {
     const data = await Borrow.aggregate([
       {
         $lookup: {
-          from: "notes",              // collection name
-          localField: "book",         // field in Borrow referencing Note._id
-          foreignField: "_id",        // Note._id
+          from: "notes",              
+          localField: "book",         
+          foreignField: "_id",     
           as: "bookDetails"
         }
       },

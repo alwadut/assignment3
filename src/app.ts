@@ -9,7 +9,7 @@ const app: Application = express()
 
 app.use(express.json())
 
-app.use("/notes",noteRoutes)
+app.use("/",noteRoutes)
 
 
 app.get('/', (req:Request, res:Response) => {
