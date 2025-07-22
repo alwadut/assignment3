@@ -5,7 +5,7 @@ import { Note } from "../models/node.model";
 
 export const noteRoutes = Router();
 
-noteRoutes.post("/api", async (req: Request, res: Response) => {
+noteRoutes.post("/", async (req: Request, res: Response) => {
   const body = req.body;
 
   //  const myNote = new Note({
