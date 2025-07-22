@@ -7,7 +7,7 @@ const express_1 = __importDefault(require("express"));
 const node_controler_1 = require("./app/controler/node.controler");
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
-app.use("/notes", node_controler_1.noteRoutes);
+app.use('/', node_controler_1.noteRoutes);
 app.get('/', (req, res) => {
     res.send('Hello World!');
 });

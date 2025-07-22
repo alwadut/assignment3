@@ -15,7 +15,7 @@ const express_1 = require("express");
 // import app from "../../app";
 const node_model_2 = require("../models/node.model");
 exports.noteRoutes = (0, express_1.Router)();
-exports.noteRoutes.post("/api", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.noteRoutes.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const body = req.body;
     //  const myNote = new Note({
     //     title:"learning Mongoss",
@@ -32,7 +32,7 @@ exports.noteRoutes.post("/api", (req, res) => __awaiter(void 0, void 0, void 0, 
         data
     });
 }));
-exports.noteRoutes.get("/api/books", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.noteRoutes.get("/books", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //   const body = req.body;
     //   const note = await Note.find({genre:"SCIENCE"});
     //   const note = await Note.find({ genre: { $exists: true } }).sort({ genre: 1 }).limit(10);
@@ -58,7 +58,7 @@ exports.noteRoutes.get("/api/books", (req, res) => __awaiter(void 0, void 0, voi
         data
     });
 }));
-exports.noteRoutes.get("/api/books/:bookId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.noteRoutes.get("/books/:bookId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const bookId = req.params.bookId;
         const data = yield node_model_2.Note.findById(bookId);
@@ -83,7 +83,7 @@ exports.noteRoutes.get("/api/books/:bookId", (req, res) => __awaiter(void 0, voi
         });
     }
 }));
-exports.noteRoutes.put("/api/books/:bookId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.noteRoutes.put("/books/:bookId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const bookId = req.params.bookId;
         const updates = req.body;
@@ -112,7 +112,7 @@ exports.noteRoutes.put("/api/books/:bookId", (req, res) => __awaiter(void 0, voi
         });
     }
 }));
-exports.noteRoutes.delete("/api/books/:bookId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.noteRoutes.delete("/books/:bookId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const bookId = req.params.bookId;
     const data = yield node_model_2.Note.findByIdAndDelete(bookId);
     res.status(201).json({
@@ -121,7 +121,7 @@ exports.noteRoutes.delete("/api/books/:bookId", (req, res) => __awaiter(void 0, 
         data: null
     });
 }));
-exports.noteRoutes.post("/api/borrow", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.noteRoutes.post("/borrow", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { book, quantity, dueDate } = req.body;
         const data = yield node_model_2.Note.findById(book);
@@ -149,16 +149,16 @@ exports.noteRoutes.post("/api/borrow", (req, res) => __awaiter(void 0, void 0, v
         });
     }
 }));
-exports.noteRoutes.get("/api/borrow", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.noteRoutes.get("/borrow", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const data = yield node_model_1.Borrow.aggregate([
             {
                 $lookup: {
                     from: "notes",
-                    localField: "_id",
+                    localField: "book",
                     foreignField: "_id",
                     as: "bookDetails"
-                },
+                }
             },
             { $unwind: "$bookDetails" },
             {
@@ -174,8 +174,8 @@ exports.noteRoutes.get("/api/borrow", (req, res) => __awaiter(void 0, void 0, vo
                 $project: {
                     _id: 0,
                     book: {
-                        title: "$bookDetails.title",
-                        isbn: "$bookDetails.isbn"
+                        title: "$_id.title",
+                        isbn: "$_id.isbn"
                     },
                     totalQuantity: 1
                 }
